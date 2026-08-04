@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from config import TG_BOT_TOKEN
+from tg_bot.bot import start_bot
 
 
 logging.basicConfig(
@@ -16,26 +16,32 @@ print("==============================")
 
 async def main():
 
+    app = start_bot()
+
+
+    if not app:
+
+        print(
+            "Telegram failed"
+        )
+
+        return
+
+
     print(
-        "Config loaded"
+        "Telegram online"
     )
 
 
-    if TG_BOT_TOKEN:
+    await app.initialize()
 
-        print(
-            "Telegram token detected"
-        )
+    await app.start()
 
-    else:
-
-        print(
-            "TG_BOT_TOKEN missing"
-        )
+    await app.updater.start_polling()
 
 
     print(
-        "Scanner waiting..."
+        "Bot running..."
     )
 
 
@@ -47,6 +53,4 @@ async def main():
 
 if __name__ == "__main__":
 
-    asyncio.run(
-        main()
-    )
+    asyncio.run(main())
