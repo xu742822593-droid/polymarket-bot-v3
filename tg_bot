@@ -1,0 +1,95 @@
+from telegram import Update
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    ContextTypes
+)
+
+from config import TG_BOT_TOKEN
+
+
+# =========================
+# /start
+# =========================
+
+async def start(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
+    await update.message.reply_text(
+        "🤖 Polymarket Bot V3 已启动"
+    )
+
+
+
+# =========================
+# /status
+# =========================
+
+async def status(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
+    await update.message.reply_text(
+        """
+🤖 Bot Status
+
+版本:
+V3.0
+
+状态:
+运行中
+
+自动交易:
+关闭
+
+策略:
+准备加载
+        """
+    )
+
+
+
+# =========================
+# 启动 Telegram
+# =========================
+
+def start_bot():
+
+    if not TG_BOT_TOKEN:
+
+        print(
+            "TG_BOT_TOKEN missing"
+        )
+
+        return None
+
+
+
+    app = (
+        Application
+        .builder()
+        .token(TG_BOT_TOKEN)
+        .build()
+    )
+
+
+    app.add_handler(
+        CommandHandler(
+            "start",
+            start
+        )
+    )
+
+
+    app.add_handler(
+        CommandHandler(
+            "status",
+            status
+        )
+    )
+
+
+    return app
